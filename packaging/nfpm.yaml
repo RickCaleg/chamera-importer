@@ -1,0 +1,43 @@
+# Builds both the .deb and .rpm with https://nfpm.goreleaser.com (a single static Go binary —
+# no dpkg-deb/rpmbuild install required). ${VERSION} / ${LINUX_BINARY} are plain shell
+# variables, not nfpm templates — resolve them with envsubst before handing this to nfpm,
+# then run from the repo root:
+#
+#   VERSION=0.1.0 LINUX_BINARY=<path to the published linux-x64 self-contained binary> \
+#     envsubst < packaging/nfpm.yaml > /tmp/nfpm.resolved.yaml
+#   nfpm package --config /tmp/nfpm.resolved.yaml --packager deb --target dist/
+#   nfpm package --config /tmp/nfpm.resolved.yaml --packager rpm --target dist/
+name: charmera-importer
+arch: amd64
+platform: linux
+version: "${VERSION}"
+section: graphics
+priority: optional
+maintainer: "Richardson Calegari Saconi <https://github.com/RickCaleg>"
+vendor: "Richardson Calegari Saconi"
+homepage: "https://github.com/RickCaleg/chamera-importer"
+license: MIT
+description: |
+  USB photo importer for Kodak cameras.
+  Lists removable USB devices, shows their photos as thumbnails, extracts
+  EXIF metadata, and imports them with configurable folder organization,
+  file naming, and SHA-256 duplicate detection. Self-contained build:
+  bundles its own .NET runtime, no external dependencies beyond a standard
+  Linux desktop.
+
+contents:
+  - src: "${LINUX_BINARY}"
+    dst: /opt/charmera-importer/charmera-importer
+    file_info:
+      mode: 0755
+  - src: packaging/linux/charmera-importer.desktop
+    dst: /usr/share/applications/charmera-importer.desktop
+    file_info:
+      mode: 0644
+  - src: charmera-importer/Assets/charmera-icon.png
+    dst: /usr/share/icons/hicolor/256x256/apps/charmera-importer.png
+    file_info:
+      mode: 0644
+  - src: /opt/charmera-importer/charmera-importer
+    dst: /usr/bin/charmera-importer
+    type: symlink

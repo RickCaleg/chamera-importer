@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Charmera Importer
+Comment=USB photo importer for Kodak cameras
+Exec=charmera-importer
+Icon=charmera-importer
+Terminal=false
+Categories=Graphics;Photography;
