@@ -1,0 +1,154 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <!-- Kodak-inspired brand palette: bold red as the primary accent, near-black header,
+       clean light surfaces. Values are the single source of truth for status colors —
+       Converters/ImportStatusToBrushConverter.cs mirrors StatusImported/Duplicate/Error/Pending. -->
+  <Styles.Resources>
+    <ResourceDictionary>
+      <Color x:Key="KodakRedColor">#ED1C24</Color>
+      <Color x:Key="KodakRedHoverColor">#D4151C</Color>
+      <Color x:Key="KodakRedPressedColor">#B01015</Color>
+      <Color x:Key="KodakYellowColor">#FFC72C</Color>
+
+      <Color x:Key="InkPrimaryColor">#1A1A1E</Color>
+      <Color x:Key="InkSecondaryColor">#6B7280</Color>
+      <Color x:Key="InkTertiaryColor">#9CA3AF</Color>
+
+      <Color x:Key="SurfaceAppColor">#F3F3F5</Color>
+      <Color x:Key="SurfaceCardColor">#FFFFFF</Color>
+      <Color x:Key="SurfaceHeaderColor">#17181B</Color>
+
+      <Color x:Key="BorderSubtleColor">#E4E4E7</Color>
+      <Color x:Key="BorderStrongColor">#D4D4D8</Color>
+
+      <SolidColorBrush x:Key="KodakRedBrush" Color="{StaticResource KodakRedColor}" />
+      <SolidColorBrush x:Key="KodakRedHoverBrush" Color="{StaticResource KodakRedHoverColor}" />
+      <SolidColorBrush x:Key="KodakRedPressedBrush" Color="{StaticResource KodakRedPressedColor}" />
+      <SolidColorBrush x:Key="KodakYellowBrush" Color="{StaticResource KodakYellowColor}" />
+
+      <SolidColorBrush x:Key="InkPrimaryBrush" Color="{StaticResource InkPrimaryColor}" />
+      <SolidColorBrush x:Key="InkSecondaryBrush" Color="{StaticResource InkSecondaryColor}" />
+      <SolidColorBrush x:Key="InkTertiaryBrush" Color="{StaticResource InkTertiaryColor}" />
+
+      <SolidColorBrush x:Key="SurfaceAppBrush" Color="{StaticResource SurfaceAppColor}" />
+      <SolidColorBrush x:Key="SurfaceCardBrush" Color="{StaticResource SurfaceCardColor}" />
+      <SolidColorBrush x:Key="SurfaceHeaderBrush" Color="{StaticResource SurfaceHeaderColor}" />
+
+      <SolidColorBrush x:Key="BorderSubtleBrush" Color="{StaticResource BorderSubtleColor}" />
+      <SolidColorBrush x:Key="BorderStrongBrush" Color="{StaticResource BorderStrongColor}" />
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <!-- Primary CTA button (Import) -->
+  <Style Selector="Button.primary">
+    <Setter Property="Background" Value="{StaticResource KodakRedBrush}" />
+    <Setter Property="Foreground" Value="White" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="FontSize" Value="15" />
+    <Setter Property="Padding" Value="20,15" />
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+    <Setter Property="Cursor" Value="Hand" />
+  </Style>
+  <Style Selector="Button.primary:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="{StaticResource KodakRedHoverBrush}" />
+  </Style>
+  <Style Selector="Button.primary:pressed /template/ ContentPresenter">
+    <Setter Property="Background" Value="{StaticResource KodakRedPressedBrush}" />
+  </Style>
+  <Style Selector="Button.primary:disabled /template/ ContentPresenter">
+    <Setter Property="Background" Value="{StaticResource BorderStrongBrush}" />
+  </Style>
+
+  <!-- Secondary / outline button -->
+  <Style Selector="Button.secondary">
+    <Setter Property="Background" Value="White" />
+    <Setter Property="Foreground" Value="{StaticResource InkPrimaryBrush}" />
+    <Setter Property="BorderBrush" Value="{StaticResource BorderStrongBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="FontWeight" Value="Medium" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="Padding" Value="16,12" />
+    <Setter Property="CornerRadius" Value="9" />
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+    <Setter Property="Cursor" Value="Hand" />
+  </Style>
+  <Style Selector="Button.secondary:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="{StaticResource SurfaceAppBrush}" />
+  </Style>
+
+  <!-- Small square icon button (refresh) -->
+  <Style Selector="Button.icon">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="White" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="BorderBrush" Value="#33FFFFFF" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="Padding" Value="10,8" />
+    <Setter Property="FontSize" Value="15" />
+    <Setter Property="Cursor" Value="Hand" />
+  </Style>
+  <Style Selector="Button.icon:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="#22FFFFFF" />
+  </Style>
+
+  <!-- Form controls -->
+  <Style Selector="ComboBox">
+    <Setter Property="Background" Value="White" />
+    <Setter Property="BorderBrush" Value="{StaticResource BorderSubtleBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="9" />
+    <Setter Property="Padding" Value="14,0" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="Foreground" Value="{StaticResource InkPrimaryBrush}" />
+    <Setter Property="MinHeight" Value="42" />
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+  </Style>
+
+  <Style Selector="CheckBox">
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="Foreground" Value="{StaticResource InkPrimaryBrush}" />
+  </Style>
+
+  <Style Selector="ProgressBar">
+    <Setter Property="Height" Value="8" />
+    <Setter Property="CornerRadius" Value="4" />
+    <Setter Property="Background" Value="{StaticResource BorderSubtleBrush}" />
+  </Style>
+
+  <!-- Section labels in the sidebar -->
+  <Style Selector="TextBlock.sectionLabel">
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="Foreground" Value="{StaticResource InkSecondaryBrush}" />
+  </Style>
+
+  <!-- Thumbnail grid: strip the default Fluent selection/hover chrome so our own
+       card border (see MainWindow.axaml "photoCard" Border) provides the highlight. -->
+  <Style Selector="ListBox.photoGrid">
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+  <Style Selector="ListBox.photoGrid ListBoxItem">
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="Margin" Value="0" />
+    <Setter Property="CornerRadius" Value="14" />
+  </Style>
+  <Style Selector="ListBox.photoGrid ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+  <Style Selector="ListBox.photoGrid ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+
+  <Style Selector="Border.photoCard">
+    <Setter Property="BorderBrush" Value="{StaticResource BorderSubtleBrush}" />
+    <Setter Property="BorderThickness" Value="1.5" />
+  </Style>
+  <Style Selector="ListBoxItem:selected Border.photoCard">
+    <Setter Property="BorderBrush" Value="{StaticResource KodakRedBrush}" />
+    <Setter Property="BorderThickness" Value="2.5" />
+  </Style>
+
+</Styles>

@@ -1,0 +1,86 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Avalonia.Media.Imaging;
+using CommunityToolkit.Mvvm.ComponentModel;
+using charmera_importer.Localization;
+using charmera_importer.Models;
+
+namespace charmera_importer.ViewModels;
+
+public partial class PhotoItemViewModel : ViewModelBase
+{
+    public PhotoImportCandidate Candidate { get; }
+
+    [ObservableProperty]
+    public partial Bitmap? Thumbnail { get; set; }
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasStatusBadge))]
+    [NotifyPropertyChangedFor(nameof(StatusLabel))]
+    public partial ImportStatus Status { get; set; }
+
+    [ObservableProperty]
+    public partial string? StatusMessage { get; set; }
+
+    public string FileName => Candidate.FileName;
+    public string? CameraMake => Candidate.Exif?.CameraMake;
+    public string? CameraModel => Candidate.Exif?.CameraModel;
+    public DateTime? DateTaken => Candidate.Exif?.DateTaken;
+    public int? Width => Candidate.Exif?.Width;
+    public int? Height => Candidate.Exif?.Height;
+    public IEnumerable<string> AllTags =>
+        Candidate.Exif?.AllTags.Select(kv => $"{kv.Key}: {kv.Value}") ?? Enumerable.Empty<string>();
+    public bool HasStatusBadge => Status != ImportStatus.Pending;
+    public string StatusLabel => LocalizedStrings.Instance.GetStatusLabel(Status);
+
+    // Cameras vary widely in what EXIF they write (this Kodak writes none at all) — the detail
+    // panel hides rows with no data instead of showing blank "Marca:" / "Modelo:" labels.
+    public bool HasCameraMake => !string.IsNullOrWhiteSpace(CameraMake);
+    public bool HasCameraModel => !string.IsNullOrWhiteSpace(CameraModel);
+    public bool HasDateTaken => DateTaken.HasValue;
+    public bool HasDimensions => Width.HasValue && Height.HasValue;
+    public bool HasAnyBasicExifInfo => HasCameraMake || HasCameraModel || HasDateTaken || HasDimensions;
+
+    public PhotoItemViewModel(PhotoImportCandidate candidate)
+    {
+        Candidate = candidate;
+        Thumbnail = candidate.Thumbnail;
+        Status = candidate.Status;
+        StatusMessage = candidate.StatusMessage;
+    }
+
+    public void ApplyExif(PhotoExifData? exif)
+    {
+        Candidate.Exif = exif;
+        OnPropertyChanged(nameof(CameraMake));
+        OnPropertyChanged(nameof(CameraModel));
+        OnPropertyChanged(nameof(DateTaken));
+        OnPropertyChanged(nameof(Width));
+        OnPropertyChanged(nameof(Height));
+        OnPropertyChanged(nameof(AllTags));
+        OnPropertyChanged(nameof(HasCameraMake));
+        OnPropertyChanged(nameof(HasCameraModel));
+        OnPropertyChanged(nameof(HasDateTaken));
+        OnPropertyChanged(nameof(HasDimensions));
+        OnPropertyChanged(nameof(HasAnyBasicExifInfo));
+    }
+
+    public void ApplyThumbnail(Bitmap? thumbnail)
+    {
+        Candidate.Thumbnail = thumbnail;
+        Thumbnail = thumbnail;
+    }
+
+    public void ApplyStatus(ImportStatus status, string? statusMessage)
+    {
+        Candidate.Status = status;
+        Candidate.StatusMessage = statusMessage;
+        Status = status;
+        StatusMessage = statusMessage;
+    }
+
+    // Called by MainViewModel (which owns the single LocalizedStrings subscription) for every
+    // live photo item after a language switch, so already-rendered status badges retranslate.
+    public void RefreshLocalizedText() => OnPropertyChanged(nameof(StatusLabel));
+}

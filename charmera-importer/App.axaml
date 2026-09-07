@@ -2,14 +2,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="charmera_importer.App"
              xmlns:local="using:charmera_importer"
-             RequestedThemeVariant="Default">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+             RequestedThemeVariant="Light">
+             <!-- Forced to Light: the app owns a consistent branded look (Kodak red on white/near-black)
+                  rather than following the OS light/dark preference. -->
 
     <Application.DataTemplates>
         <local:ViewLocator />
     </Application.DataTemplates>
 
     <Application.Styles>
-        <FluentTheme />
+        <FluentTheme>
+            <FluentTheme.Palettes>
+                <ColorPaletteResources x:Key="Light" Accent="#ED1C24" />
+                <ColorPaletteResources x:Key="Dark" Accent="#ED1C24" />
+            </FluentTheme.Palettes>
+        </FluentTheme>
+        <StyleInclude Source="avares://charmera-importer/Styles/Theme.axaml" />
     </Application.Styles>
 </Application>

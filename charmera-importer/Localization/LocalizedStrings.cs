@@ -1,0 +1,93 @@
+using System.Collections.Generic;
+using CommunityToolkit.Mvvm.ComponentModel;
+using charmera_importer.Models;
+
+namespace charmera_importer.Localization;
+
+// App-wide singleton holding the active language's strings. XAML binds to it via the
+// {loc:Loc Key} markup extension (see LocExtension.cs); C# code (ViewModels, Services)
+// reads it directly as LocalizedStrings.Instance. Apply() raises OnPropertyChanged(string.Empty),
+// which refreshes every bound property at once — the same "all properties changed" convention
+// INotifyPropertyChanged consumers (including Avalonia's binding engine) already understand.
+public sealed class LocalizedStrings : ObservableObject
+{
+    public static LocalizedStrings Instance { get; } = new();
+
+    private IReadOnlyDictionary<string, string> map = Translations.Get(LanguageOption.English.Code);
+
+    private LocalizedStrings()
+    {
+    }
+
+    public void Apply(string languageCode)
+    {
+        map = Translations.Get(languageCode);
+        OnPropertyChanged(string.Empty);
+    }
+
+    private string Get(string key) => map.TryGetValue(key, out var value) ? value : key;
+
+    public string DeviceLabel => Get("Header_DeviceLabel");
+    public string DevicePlaceholder => Get("Header_DevicePlaceholder");
+    public string RefreshTooltip => Get("Header_RefreshTooltip");
+    public string LanguageLabel => Get("Header_LanguageLabel");
+
+    public string DestinationLabel => Get("Sidebar_DestinationLabel");
+    public string NoDestinationSelected => Get("Sidebar_NoDestinationSelected");
+    public string BrowseButton => Get("Sidebar_BrowseButton");
+    public string OrganizeLabel => Get("Sidebar_OrganizeLabel");
+    public string NamingLabel => Get("Sidebar_NamingLabel");
+    public string KeepOriginalName => Get("Sidebar_KeepOriginalName");
+    public string DeleteAfterImport => Get("Sidebar_DeleteAfterImport");
+    public string DeleteAfterImportWarning => Get("Sidebar_DeleteAfterImportWarning");
+    public string ImportButton => Get("Sidebar_ImportButton");
+
+    public string PhotosTitle => Get("Content_PhotosTitle");
+    public string EmptyStateTitle => Get("Content_EmptyStateTitle");
+    public string EmptyStateSubtitle => Get("Content_EmptyStateSubtitle");
+
+    public string DetailTitle => Get("Detail_Title");
+    public string DetailMake => Get("Detail_Make");
+    public string DetailModel => Get("Detail_Model");
+    public string DetailDate => Get("Detail_Date");
+    public string DetailDimensions => Get("Detail_Dimensions");
+    public string DetailNoExifNote => Get("Detail_NoExifNote");
+    public string DetailAllTags => Get("Detail_AllTags");
+
+    public string OrgYearMonth => Get("Org_YearMonth");
+    public string OrgYearMonthDay => Get("Org_YearMonthDay");
+    public string OrgByCameraModel => Get("Org_ByCameraModel");
+    public string OrgFlat => Get("Org_Flat");
+
+    public string ScanningStatus => Get("Status_Scanning");
+    public string ImportCompleteStatus => Get("Status_ImportComplete");
+
+    public string AlreadyImportedMessage => Get("Import_AlreadyImported");
+    public string AlreadyAtDestinationMessage => Get("Import_AlreadyAtDestination");
+    public string ImportedMessage => Get("Import_Success");
+
+    public string FolderPickerTitle => Get("FolderPicker_Title");
+
+    public string PhotosCount(int count) => string.Format(Get("Content_PhotosCountFormat"), count);
+    public string PhotosFound(int count) => string.Format(Get("Status_PhotosFoundFormat"), count);
+    public string Importing(string fileName, int completed, int total) =>
+        string.Format(Get("Status_ImportingFormat"), fileName, completed, total);
+    public string ImportError(string message) => string.Format(Get("Import_ErrorFormat"), message);
+    public string DeleteFailedNote(string message) => string.Format(Get("Import_DeleteFailedFormat"), message);
+
+    public string OrganizationDisplayName(FolderOrganizationScheme scheme) => scheme switch
+    {
+        FolderOrganizationScheme.YearMonth => OrgYearMonth,
+        FolderOrganizationScheme.YearMonthDay => OrgYearMonthDay,
+        FolderOrganizationScheme.ByCameraModel => OrgByCameraModel,
+        _ => OrgFlat,
+    };
+
+    public string GetStatusLabel(ImportStatus status) => status switch
+    {
+        ImportStatus.Imported => Get("StatusLabel_Imported"),
+        ImportStatus.Duplicate => Get("StatusLabel_Duplicate"),
+        ImportStatus.Error => Get("StatusLabel_Error"),
+        _ => Get("StatusLabel_Pending"),
+    };
+}
